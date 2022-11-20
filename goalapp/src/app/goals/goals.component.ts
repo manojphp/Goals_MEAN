@@ -55,7 +55,7 @@ export class GoalsComponent implements OnInit {
           if(this.goaldata[i].steps.length){            
             for(let j=0;j<this.goaldata[i].steps.length;j++){
               //console.log(this.goaldata[i].steps[j]);
-                if(this.goaldata[i].steps[j].status =='completed'){
+                if(this.goaldata[i].steps[j].status =='completed' || this.goaldata[i].steps[j].status =='in-progress'){
                   completed_steps++;
                 }
             }
