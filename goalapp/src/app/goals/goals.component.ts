@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GoalsService } from './goals.service';
@@ -16,7 +17,7 @@ import { GoalsService } from './goals.service';
           <p><b>Goal Name: </b>{{goal.title}}</p>
           <p><b>Description: </b> {{goal.description}}</p>
           <p> <b>Dead-line: </b> {{goal.deadline | date: 'dd/MM/yyyy' }}</p>
-          <p>Status: in-progress</p>
+          <p style="color: red;">{{goal.warn_msg}}</p>
           <strong>Progress: {{ goal.progress | number : '1.2-2'}}%</strong>
           <progress class="progress is-success" value="{{goal.progress}}" max="100">{{goal.progress}}%</progress>
         </div>       
@@ -36,7 +37,7 @@ export class GoalsComponent implements OnInit {
   goalsList:any;
   goaldata:any;
   finalGoalData:any=[];
-  constructor(private router: Router,private goalService: GoalsService) {
+  constructor(private router: Router,private goalService: GoalsService,private datePipe: DatePipe) {
     this.goalService.getGoals().subscribe((response) => {
       this.goalsList = response;
       this.goaldata = this.goalsList.data;
@@ -47,6 +48,8 @@ export class GoalsComponent implements OnInit {
           let tempArr: any=[];
           let completed_steps = 0;
           let progress = 0;
+          var warn_msg:string='';
+          var now = new Date();
           tempArr['_id'] = this.goaldata[i]._id;
           tempArr['title'] = this.goaldata[i].title;
           tempArr['description'] = this.goaldata[i].description;
@@ -58,12 +61,26 @@ export class GoalsComponent implements OnInit {
                 if(this.goaldata[i].steps[j].status =='completed' || this.goaldata[i].steps[j].status =='in-progress'){
                   completed_steps++;
                 }
+               
+                var selectedDate = new Date(this.goaldata[i].steps[j].deadline);
+                if(selectedDate < now){
+                  
+                  warn_msg += "Your step '"+this.goaldata[i].steps[j].title+"' is due @"+this.datePipe.transform(this.goaldata[i].steps[j].deadline, 'dd/MM/yyyy')+ "\r\n";
+
+                }
+                console.log(warn_msg);
             }
           }
           if(total_steps>0 && completed_steps>0){
             progress = ((completed_steps/total_steps)*100);
           }
+
+          if(progress >= 100){
+            warn_msg = '';
+          }
+          
           tempArr['progress'] = progress;
+          tempArr["warn_msg"] = warn_msg;
           this.finalGoalData.push(tempArr);
         }
       }
