@@ -17,7 +17,7 @@ import { GoalsService } from './goals.service';
           <p><b>Description: </b> {{goal.description}}</p>
           <p> <b>Dead-line: </b> {{goal.deadline | date: 'dd/MM/yyyy' }}</p>
           <p>Status: in-progress</p>
-          <strong>Progress: {{goal.progress}}%</strong>
+          <strong>Progress: {{ goal.progress | number : '1.2-2'}}%</strong>
           <progress class="progress is-success" value="{{goal.progress}}" max="100">{{goal.progress}}%</progress>
         </div>       
         <a (click)="steps(goal._id)" class="button is-success m-2">
