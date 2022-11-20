@@ -135,7 +135,11 @@ module.exports.updateStepById = async(req, res, next) => {
 
 module.exports.deleteStepById = async(req, res, next) => {
     try {
-
+        const goalId = req.params.goal_id
+        const stepId = req.params.step_id
+            //const results = await goalsModel.deleteOne({ _id: goalId, "steps._id": stepId })
+        const results = await goalsModel.updateOne({ _id: goalId }, { $pull: { steps: { _id: stepId } } })
+        res.json({ success: true, data: results })
     } catch (e) {
         next(e)
     }

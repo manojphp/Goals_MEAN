@@ -16,8 +16,9 @@ import { DatePipe } from '@angular/common';
     RouterModule.forChild([
       { path: '', component: ListComponent },
       { path: 'steps', component: ListComponent },
-      { path: 'steps/add', component: AddComponent },
-      { path: 'steps/update/:step_id', component: UpdateComponent },
+      { path: 'steps/:goal_id', component: ListComponent },  
+      { path: 'steps/:goal_id/add', component: AddComponent },    
+      { path: 'steps/update/:step_id/:goal_id', component: UpdateComponent },
     ]),
   ],
 })

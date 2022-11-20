@@ -22,7 +22,7 @@ import { GoalsService } from './goals.service';
             33%
           </progress>
         </div>       
-        <a  class="button is-success m-2">
+        <a (click)="steps(goal._id)" class="button is-success m-2">
           Steps</a>
         <a routerLink="/goals/update/{{goal._id}}" class="button is-info m-2">
           Edit</a>
@@ -44,8 +44,8 @@ export class GoalsComponent implements OnInit {
   edit() {
     this.router.navigate(['goals', 'update', this.userid]);
   }
-  steps() {
-    this.router.navigate(['goals', 'step', 'steps']);
+  steps(goal_id:any) {
+    this.router.navigate(['goals', 'step', 'steps',goal_id]);
   }
   delete(goal_id:any) {
     this.goalService.deleteGoalById(goal_id).subscribe((reponse) => {

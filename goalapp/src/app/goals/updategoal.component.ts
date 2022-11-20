@@ -37,7 +37,8 @@ export class UpdategoalComponent {
   goalsData:any;
   goalsVals:any;
   form:any;
-  constructor(private datePipe: DatePipe ,private goalService: GoalsService,private fb: FormBuilder,private router: Router,private route: ActivatedRoute) {
+  constructor(private datePipe: DatePipe ,private goalService: GoalsService,private fb: FormBuilder,
+    private router: Router,private route: ActivatedRoute) {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.email]],
       deadline: ['', [Validators.required]],

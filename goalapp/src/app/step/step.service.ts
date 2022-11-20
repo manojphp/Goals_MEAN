@@ -12,31 +12,31 @@ export class StepService {
   constructor(private http: HttpClient) {}
 
   getSteps(goal_id: string) {
-    return this.http.get<{ data: IStep[] }>(
-      environment.server + '/goals:' + goal_id + `/steps`
+    return this.http.get(
+      environment.server + '/goals/user/'+this.userid+'/goal/'+goal_id+'/steps'
     );
   }
-  getStepById(step_id: string, user_id: string, goal_id: string) {
-    return this.http.get<{ data: IStep }>(
+  getStepById(step_id: string, goal_id: string) {
+    return this.http.get(
       environment.server +
-        '/steps/user/:' +
-        user_id +
-        `/goal/:` +
+        '/goals/user/' +
+        this.userid +
+        `/goal/` +
         goal_id +
-        `/` +
+        `/steps/` +
         step_id
     );
   }
-  addStep(step:any) {
-    return this.http.post(environment.server + '/user/'+this.userid+'/goal/:goal_id/steps', step);
+  addStep(step:any,goal_id:any) {
+    return this.http.post(environment.server + '/goals/user/'+this.userid+'/goal/'+goal_id+'/steps', step);
   }
-  updateStepById(step: IStep, step_id: string) {
-    return this.http.patch<IStep>(
-      environment.server + '/steps/' + step_id,
+  updateStepById(step: any, goal_id:string, step_id: string) {
+    return this.http.patch(
+      environment.server + '/goals/user/'+this.userid+'/goal/'+goal_id+'/steps/' + step_id,
       step
     );
   }
-  deleteStepById(step_id: string) {
-    return this.http.delete(environment.server + '/steps/' + step_id);
+  deleteStepById(goal_id:string,step_id: string) {
+    return this.http.delete(environment.server + '/goals/'+goal_id+'/steps/' + step_id);
   }
 }

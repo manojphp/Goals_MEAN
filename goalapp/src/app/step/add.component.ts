@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { StepService } from '../step/step.service';
 
 @Component({
@@ -18,7 +19,7 @@ import { StepService } from '../step/step.service';
         formControlName="deadline"
         class="input is-normal m-2"
       />
-      <div class="container is-fullwidth m-2" formControlName="status">
+      <div class="container is-fullwidth m-2">
         <label> Status: </label>
         <select formControlName="status" id="status">
           <option value="not-strated">not-strated</option>
@@ -40,13 +41,17 @@ import { StepService } from '../step/step.service';
 export class AddComponent implements OnInit {
 
   form:any;
-  constructor(private datePipe: DatePipe ,private router: Router,private stepService: StepService,private fb: FormBuilder) {
+  goal_id:any;
+  constructor(private datePipe: DatePipe ,private router: Router,private stepService: StepService,private fb: FormBuilder,
+    private route: ActivatedRoute) {
+    this.goal_id = this.route.snapshot.paramMap.get('goal_id');
     this.form = this.fb.group({
       title: ['My Step 1', [Validators.required]],
       deadline: ['', [Validators.required]],
       description: ['', [Validators.required]],
       status: ['', [Validators.required]],
     });
+    
   }
   
   submit() {
@@ -56,9 +61,12 @@ export class AddComponent implements OnInit {
       description:this.form.get('description')!.value,
       status:this.form.get('status')!.value,
     };
-    this.stepService.addStep(formdata).subscribe((reponse) => {
-      this.router.navigate(['steps', 'list']);
+    this.stepService.addStep(formdata,this.goal_id).subscribe((reponse) => {
+      //this.router.navigate(['steps', 'list']);
+      this.router.navigate(['goals', 'step', 'steps', this.goal_id]);
     });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('You are at AddComponent')
+  }
 }
